@@ -127,8 +127,8 @@ export default function App() {
     return { memberId: m.id, name: m.name, balance: Math.abs(balance) < 0.005 ? 0 : balance }
   })
   const categoryData = CATEGORIES.map(c => ({
-    name: c, value: expenses.filter(e => e.category === c).reduce((s, e) => s + e.amount, 0)
-  })).filter(x => x.value > 0)
+  name: c, value: expenses.filter(e => e.category === c).reduce((s, e) => s + e.amount, 0)
+})).filter(x => x.value > 0)
   const chartData = balances.map(b => ({ name: b.name, balance: b.balance }))
 
   function addMember(e: FormEvent) {
