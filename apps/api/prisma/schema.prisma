@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id        String           @id @default(cuid())
+  name      String
+  createdAt DateTime         @default(now())
+  paid      Expense[]        @relation("ExpensePayer")
+  shares    ExpenseShare[]
+}
+
+model Expense {
+  id          String         @id @default(cuid())
+  description String
+  category    String
+  amountPaise Int
+  date        DateTime
+  paidById    String
+  paidBy      Member         @relation("ExpensePayer", fields: [paidById], references: [id])
+  shares      ExpenseShare[]
+  createdAt   DateTime       @default(now())
+}
+
+model ExpenseShare {
+  id        String   @id @default(cuid())
+  expenseId String
+  memberId  String
+  sharePaise Int
+  expense   Expense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  member    Member   @relation(fields: [memberId], references: [id])
+  @@unique([expenseId, memberId])
+  @@index([memberId])
+}
